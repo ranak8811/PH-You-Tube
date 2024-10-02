@@ -9,7 +9,7 @@ function getTimeString(time) {
   return `${hour} hour ${minute} minutes ${remainingSeconds} seconds ago`;
 }
 
-const loadCatagories = () => {
+const loadCategories = () => {
   //   console.log("catagories");
   fetch("https://openapi.programming-hero.com/api/phero-tube/categories")
     .then((res) => res.json())
@@ -21,6 +21,15 @@ const loadVideos = () => {
   fetch("https://openapi.programming-hero.com/api/phero-tube/videos")
     .then((res) => res.json())
     .then((data) => displayVideos(data.videos))
+    .catch((err) => console.log(err));
+};
+
+const loadCategoryVideos = (id) => {
+  //   alert(id);
+
+  fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
+    .then((res) => res.json())
+    .then((data) => displayVideos(data.category))
     .catch((err) => console.log(err));
 };
 
@@ -47,6 +56,7 @@ const loadVideos = () => {
 const displayVideos = (videos) => {
   //   console.log(videos);
   const videoContainer = document.getElementById("videos");
+  videoContainer.innerHTML = "";
   videos.forEach((video) => {
     console.log(video);
 
@@ -62,7 +72,7 @@ const displayVideos = (videos) => {
             ${
               video.others.posted_date?.length == 0
                 ? ""
-                : `<span class="absolute bottom-2 right-2 bg-black rounded p-1 text-white">${getTimeString(
+                : `<span class="absolute text-xs bottom-2 right-2 bg-black rounded p-1 text-white">${getTimeString(
                     video.others.posted_date
                   )}</span>`
             }
@@ -105,13 +115,22 @@ const displayCatagories = (categories) => {
   categories.forEach((item) => {
     // console.log(item);
 
-    const button = document.createElement("button");
-    button.classList = "btn";
-    button.innerText = item.category;
+    const buttonContainer = document.createElement("div");
 
-    categoryContainer.append(button);
+    buttonContainer.innerHTML = `
+        <button onclick="loadCategoryVideos(${item.category_id})" class="btn">
+            ${item.category}
+        </button>
+
+    `;
+
+    // button.classList = "btn";
+    // button.innerText = item.category;
+    // button.onclick = alert("hei");
+    categoryContainer.append(buttonContainer);
+    // categoryContainer.append(button);
   });
 };
 
-loadCatagories();
+loadCategories();
 loadVideos();
