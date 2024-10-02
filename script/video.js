@@ -57,6 +57,21 @@ const displayVideos = (videos) => {
   //   console.log(videos);
   const videoContainer = document.getElementById("videos");
   videoContainer.innerHTML = "";
+
+  if (videos.length == 0) {
+    videoContainer.classList.remove("grid");
+    videoContainer.innerHTML = `
+        <div class="min-h-[500px] flex flex-col gap-5 justify-center items-center">
+            <img src="assets/Icon.png" alt="" />
+            <h2 class="text-center font-bold text-xl">No content here is this category</h2>
+
+        </div>
+    `;
+    return;
+  } else {
+    videoContainer.classList.add("grid");
+  }
+
   videos.forEach((video) => {
     console.log(video);
 
